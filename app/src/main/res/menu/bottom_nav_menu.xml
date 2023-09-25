@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/listFragment"
+        android:icon="@drawable/ic_baseline_list"
+        android:title="List" />
+
+    <item
+        android:id="@+id/downloadFragment"
+        android:icon="@drawable/ic_baseline_download_done_24"
+        android:title="Download" />
+
+</menu>
