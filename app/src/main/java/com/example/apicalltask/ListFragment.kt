@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +17,11 @@ import com.example.apicalltask.adapter.ParentItemAdapter
 import com.example.apicalltask.data.ApiClient
 import com.example.apicalltask.databinding.FragmentListBinding
 import com.example.apicalltask.databinding.ParentItemBinding
+import com.example.apicalltask.repository.ListRepository
 import com.example.apicalltask.viewmodel.ListViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,8 +30,8 @@ import java.io.IOException
 
 
 class ListFragment : Fragment() {
-    private val apiService = ApiClient.create()
-
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private val viewModel by viewModels<ListViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,52 +42,36 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setUpViewModels()
+        observeLiveData()
         fetchData()
+
+
     }
 
 
     private fun fetchData() {
-        val call = apiService.getHomePage()
-        Log.i("oswin2233", "fetchData: 81 " + call)
-
-        call.enqueue(object : Callback<com.example.apicalltask.data.dataclass> {
-            override fun onResponse(call: Call<com.example.apicalltask.data.dataclass>, response: Response<com.example.apicalltask.data.dataclass>) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    Log.i("oswin2233", "onResponse: 86 " + apiResponse)
-                    val homeContent = apiResponse?.response?.home_content
-                    Log.i("oswin2233", "onResponse: 89 " +homeContent)
-
-                    if (homeContent != null) {
-                        val recyclerView: RecyclerView = view?.findViewById(R.id.child_recyclerview) ?: return
-
-                        val adapter = ParentItemAdapter(homeContent)
-                        recyclerView.adapter = adapter
-                        recyclerView.layoutManager = LinearLayoutManager(context)
-                    }
-                }
-
-
-
-                else {
-                    handleApiError()
-                }
-            }
-
-            override fun onFailure(call: Call<com.example.apicalltask.data.dataclass>, t: Throwable) {
-                if (t is IOException) {
-                    // Handle network errors
-                    Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show()
-                } else {
-                    // Handle other errors
-                    Log.e(TAG, "Error: ${t.message}")
-                }
-            }
-        })
+        coroutineScope.launch(Dispatchers.IO) {
+            viewModel.listOfItem()
+        }
     }
 
+    private fun observeLiveData() {
+        viewModel.usersList.observe(this) {
+            Log.i("oswin2233", "observeLiveData: 57")
+            val recyclerView: RecyclerView =
+                view?.findViewById(R.id.child_recyclerview) ?: return@observe
 
+            val adapter = ParentItemAdapter(it.response.home_content)
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        }
+    }
+    private fun setUpViewModels() {
+        val service = ApiClient.create()
+        // service initialized for the view Model
+        viewModel.listRepo = ListRepository(service)
+    }
     private fun handleApiError() {
         // Implement error handling for API requests here
         // You can show an error message to the user or perform other actions
