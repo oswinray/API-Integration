@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apicalltask.dao.ListDatabase
+import com.example.apicalltask.databinding.FragmentDownloadBinding
+import com.example.apicalltask.databinding.ParentItemBinding
 import com.example.apicalltask.viewmodel.DownloadViewModel
 
 class DownloadFragment : Fragment() {
@@ -20,6 +22,7 @@ class DownloadFragment : Fragment() {
     var Manager: GridLayoutManager? = null
     var adapter: DownloadAdapter? = null
     var viewModel:DownloadViewModel? = null
+    private lateinit var binding : FragmentDownloadBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,6 +34,13 @@ class DownloadFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_download, container, false)
+        binding = FragmentDownloadBinding.inflate(inflater,container,false)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[DownloadViewModel::class.java]
         // Initialize your views and set up the RecyclerView here
         recyclerView = view.findViewById(R.id.rv_design)
@@ -40,13 +50,20 @@ class DownloadFragment : Fragment() {
         recyclerView!!.adapter = adapter
 
         observerSetup()
-        return view
     }
 
     private fun observerSetup() {
         viewModel?.getAllTask()?.observe(viewLifecycleOwner) { downloadedItems ->
             // Update the adapter with the new data received from the ViewModel
             Log.i("oswin2233", "observerSetup: 49" +downloadedItems)
+            if (downloadedItems.isEmpty()) {
+                binding.tvMessage.visibility = View.VISIBLE
+                binding.emptyImage.visibility = View.VISIBLE
+            } else {
+                binding.tvMessage.visibility = View.GONE
+                binding.emptyImage.visibility = View.GONE
+            }
+
             adapter?.setData(downloadedItems)
         }
     }
