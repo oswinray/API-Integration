@@ -35,18 +35,19 @@ class ListFragment : Fragment(),OnItemClickListener {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by viewModels<ListViewModel>()
     var downloadViewModel: DownloadViewModel? = null
-    private lateinit var binding : ParentItemBinding
+    private lateinit var binding : FragmentListBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.parent_item, container, false)
+        binding = FragmentListBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = ParentItemBinding.inflate(layoutInflater)
+
         downloadViewModel = ViewModelProvider(this).get(DownloadViewModel::class.java)
         showProgressBar()
         setUpViewModels()
