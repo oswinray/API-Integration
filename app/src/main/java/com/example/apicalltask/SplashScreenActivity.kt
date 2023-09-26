@@ -3,12 +3,17 @@ package com.example.apicalltask
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.SyncStateContract
+import android.view.WindowManager
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.example.apicalltask.HomeScreenActivity
+import com.example.apicalltask.R
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -16,36 +21,25 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-        if (isNetworkAvailable()) {
-            Handler(Looper.getMainLooper()).postDelayed({
-                val intent = Intent(this, HomeScreenActivity::class.java)
-                startActivity(intent)
-                finish()
-            }, 1000)
-        } else {
-            // Handle the case when there's no network connection
-            showNoNetworkError()
-        }
-    }
+        // This is used to hide the status bar and make
+        // the splash screen as a full screen activity.
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
 
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
-    }
+        // HERE WE ARE TAKING THE REFERENCE OF OUR IMAGE
+        // SO THAT WE CAN PERFORM ANIMATION USING THAT IMAGE
+        val backgroundImage: ImageView = findViewById(R.id.SplashScreenImage)
+        val slideAnimation = AnimationUtils.loadAnimation(this, R.anim.side_slide)
+        backgroundImage.startAnimation(slideAnimation)
 
-    private fun showNoNetworkError() {
-        // Display a message to the user or show a dialog
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("No Network Connection")
-        builder.setMessage("Please check your network connection and try again.")
-        builder.setPositiveButton("Retry") { _, _ ->
-            recreate() // Restart the activity to check for network again
-        }
-        builder.setNegativeButton("Exit") { _, _ ->
-            finish() // Exit the app if the user chooses to
-        }
-        val dialog = builder.create()
-        dialog.show()
+        // we used the postDelayed(Runnable, time) method
+        // to send a message with a delayed time.
+        Handler().postDelayed({
+            val intent = Intent(this, HomeScreenActivity::class.java)
+            startActivity(intent)
+            finish()
+        }, 3000) // 3000 is the delayed time in milliseconds.
     }
 }
