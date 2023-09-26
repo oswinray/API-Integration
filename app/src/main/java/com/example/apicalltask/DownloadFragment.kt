@@ -1,6 +1,8 @@
 package com.example.apicalltask
 
+import DownloadAdapter
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +11,6 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.apicalltask.adapter.DownloadAdapter
 import com.example.apicalltask.dao.ListDatabase
 import com.example.apicalltask.viewmodel.DownloadViewModel
 
@@ -38,18 +39,18 @@ class DownloadFragment : Fragment() {
         adapter = DownloadAdapter()
         recyclerView!!.adapter = adapter
 
-//        db = ListDatabase.getDatabase(requireContext())!!
-
-        Toast.makeText(requireContext(), "yes", Toast.LENGTH_SHORT).show()
         observerSetup()
         return view
     }
 
-    private fun observerSetup(){
-        viewModel?.getAllTask()?.observe(this,{
-
-        })
+    private fun observerSetup() {
+        viewModel?.getAllTask()?.observe(viewLifecycleOwner) { downloadedItems ->
+            // Update the adapter with the new data received from the ViewModel
+            Log.i("oswin2233", "observerSetup: 49" +downloadedItems)
+            adapter?.setData(downloadedItems)
+        }
     }
+
 
 
 }
