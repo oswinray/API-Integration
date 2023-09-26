@@ -32,18 +32,19 @@ import java.io.IOException
 class ListFragment : Fragment() {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by viewModels<ListViewModel>()
-    private lateinit var binding:FragmentListBinding
+    private lateinit var binding : ParentItemBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentListBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.parent_item, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = ParentItemBinding.inflate(layoutInflater)
+        showProgressBar()
         setUpViewModels()
         observeLiveData()
         fetchData()
@@ -53,7 +54,6 @@ class ListFragment : Fragment() {
 
 
     private fun fetchData() {
-        showProgressBar()
         coroutineScope.launch(Dispatchers.IO) {
             viewModel.listOfItem()
         }
@@ -61,7 +61,6 @@ class ListFragment : Fragment() {
 
     private fun observeLiveData() {
         viewModel.usersList.observe(this) {
-            hideProgressBar()
             Log.i("oswin2233", "observeLiveData: 57")
             val recyclerView: RecyclerView =
                 view?.findViewById(R.id.child_recyclerview) ?: return@observe
@@ -69,11 +68,11 @@ class ListFragment : Fragment() {
             val adapter = context?.let { it1 -> ParentItemAdapter(it.response.home_content, it1) }
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(context)
+            hideProgressBar()
         }
     }
     private fun setUpViewModels() {
         val service = ApiClient.create()
-        // service initialized for the view Model
         viewModel.listRepo = ListRepository(service)
     }
     private fun showProgressBar() {
