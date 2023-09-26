@@ -90,7 +90,6 @@ class ListFragment : Fragment(),OnItemClickListener {
 
     override fun onItemClick(title: String, thumbnail: String) {
         Log.i("oswin2222", "onItemClick: 87")
-        Toast.makeText(requireContext(),"testing",Toast.LENGTH_SHORT).show()
         downloadViewModel?.insertTask(MovieLists(title,thumbnail))
 
     }

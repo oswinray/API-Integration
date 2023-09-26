@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -55,6 +57,23 @@ class ChildItemAdapter(private val childItemList: List<Data>,context: Context) :
             val task = MovieLists(childItem.title, childItem.thumbnail_image)
             Log.i("oswin2233", "onBindViewHolder: 53 " + childItem.title)
             Log.i("oswin2233", "onBindViewHolder: 54 " + childItem.thumbnail_image)
+            val builder = AlertDialog.Builder(context)
+            val inflater = LayoutInflater.from(context)
+            val dialogView = inflater.inflate(R.layout.dialog_item_downloaded, null)
+
+            builder.setView(dialogView)
+
+            val alertDialog = builder.create()
+
+// Set a click listener for the "OK" button (optional)
+            val buttonOK = dialogView.findViewById<Button>(R.id.buttonOK)
+            buttonOK.setOnClickListener {
+                alertDialog.dismiss() // Close the dialog when "OK" is clicked
+            }
+
+            alertDialog.show()
+
+
             onItemClickListener?.onItemClick(childItem.title, childItem.thumbnail_image)
             holder.downloadImg.visibility = View.GONE
         }
