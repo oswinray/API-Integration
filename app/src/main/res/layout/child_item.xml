@@ -2,37 +2,80 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_margin="10dp"
+    android:layout_width="170dp"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="165dp"
+        android:id="@+id/cardView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-    app:cardCornerRadius="8dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
-    <ImageView
-        android:id="@+id/img_child_item"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:background="@color/white"
-        android:layout_gravity="center_horizontal"
-    app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/img_child_item"
+            android:layout_width="170dp"
+            android:layout_height="120dp"
+            android:scaleType="fitXY"
+            android:layout_gravity="fill"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_three_dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="2dp"
+            android:layout_gravity="end"
+            android:visibility="visible"
+            android:background="@drawable/ic_baseline_menu_24"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/download_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Download"
+            android:drawableStart="@drawable/ic_baseline_download_24"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="2dp"
+            android:visibility="gone"
+            android:padding="2dp"
+            android:textColor="@color/white"
+            android:background="@color/black"
+            android:layout_gravity="end"/>
+
+        <TextView
+            android:id="@+id/img_child_item_subscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:text="SUBSCRIBE"
+            android:visibility="gone"
+            android:textColor="#964B00"
+            android:padding="1dp"
+            android:layout_margin="4dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/child_item_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="2"
         android:ellipsize="end"
+        android:maxWidth="150dp"
+        android:textColor="@color/white"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
         android:textStyle="bold"
-        android:layout_marginTop="8dp"
-    app:layout_constraintTop_toBottomOf="@id/img_child_item"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
-</androidx.cardview.widget.CardView>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+       />
+
     </androidx.constraintlayout.widget.ConstraintLayout>

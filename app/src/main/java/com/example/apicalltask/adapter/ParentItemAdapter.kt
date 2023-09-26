@@ -1,5 +1,6 @@
 package com.example.apicalltask.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apicalltask.R
 import com.example.apicalltask.data.HomeContent
 
-class ParentItemAdapter(private val itemList: List<HomeContent>) :
+class ParentItemAdapter(private val itemList: List<HomeContent>,context: Context) :
     RecyclerView.Adapter<ParentItemAdapter.ParentViewHolder>() {
 
     private val viewPool = RecyclerView.RecycledViewPool()
+    private val context = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -34,7 +36,7 @@ class ParentItemAdapter(private val itemList: List<HomeContent>) :
         layoutManager.initialPrefetchItemCount = itemList.size-1
 
         // Create and set the child adapter
-        val childItemAdapter = ChildItemAdapter(parentItem.data)
+        val childItemAdapter = ChildItemAdapter(parentItem.data,context)
         parentViewHolder.childRecyclerView.layoutManager = layoutManager
         parentViewHolder.childRecyclerView.adapter = childItemAdapter
         parentViewHolder.childRecyclerView.setRecycledViewPool(viewPool)
