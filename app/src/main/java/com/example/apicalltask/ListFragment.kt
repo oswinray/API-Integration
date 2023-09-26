@@ -14,10 +14,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apicalltask.adapter.ParentItemAdapter
+import com.example.apicalltask.dao.MovieLists
 import com.example.apicalltask.data.ApiClient
 import com.example.apicalltask.databinding.FragmentListBinding
 import com.example.apicalltask.databinding.ParentItemBinding
 import com.example.apicalltask.repository.ListRepository
+import com.example.apicalltask.viewmodel.DownloadViewModel
 import com.example.apicalltask.viewmodel.ListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,9 +31,10 @@ import java.io.IOException
 
 
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(),OnItemClickListener {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by viewModels<ListViewModel>()
+    var downloadViewModel: DownloadViewModel? = null
     private lateinit var binding : ParentItemBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +47,7 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = ParentItemBinding.inflate(layoutInflater)
+        downloadViewModel = ViewModelProvider(this).get(DownloadViewModel::class.java)
         showProgressBar()
         setUpViewModels()
         observeLiveData()
@@ -65,7 +69,7 @@ class ListFragment : Fragment() {
             val recyclerView: RecyclerView =
                 view?.findViewById(R.id.child_recyclerview) ?: return@observe
 
-            val adapter = context?.let { it1 -> ParentItemAdapter(it.response.home_content, it1) }
+            val adapter = context?.let { it1 -> ParentItemAdapter(it.response.home_content, it1,this) }
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(context)
             hideProgressBar()
@@ -81,6 +85,13 @@ class ListFragment : Fragment() {
 
     private fun hideProgressBar() {
         binding.progressBar.visibility = View.INVISIBLE
+    }
+
+    override fun onItemClick(title: String, thumbnail: String) {
+        Log.i("oswin2222", "onItemClick: 87")
+        Toast.makeText(requireContext(),"testing",Toast.LENGTH_SHORT).show()
+        downloadViewModel?.insertTask(MovieLists(title,thumbnail))
+
     }
 
 }

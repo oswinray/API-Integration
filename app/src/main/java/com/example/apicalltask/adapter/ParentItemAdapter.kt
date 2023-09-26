@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apicalltask.OnItemClickListener
 import com.example.apicalltask.R
 import com.example.apicalltask.data.HomeContent
 
-class ParentItemAdapter(private val itemList: List<HomeContent>,context: Context) :
+class ParentItemAdapter(private val itemList: List<HomeContent>,context: Context,onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<ParentItemAdapter.ParentViewHolder>() {
 
     private val viewPool = RecyclerView.RecycledViewPool()
     private val context = context
+    private val onItemClickListener = onItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -37,6 +39,8 @@ class ParentItemAdapter(private val itemList: List<HomeContent>,context: Context
 
         // Create and set the child adapter
         val childItemAdapter = ChildItemAdapter(parentItem.data,context)
+
+        childItemAdapter.setOnItemClickListener(onItemClickListener)
         parentViewHolder.childRecyclerView.layoutManager = layoutManager
         parentViewHolder.childRecyclerView.adapter = childItemAdapter
         parentViewHolder.childRecyclerView.setRecycledViewPool(viewPool)
