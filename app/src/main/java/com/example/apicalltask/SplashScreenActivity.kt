@@ -42,7 +42,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 val intent = Intent(this, HomeScreenActivity::class.java)
                 startActivity(intent)
                 finish()
-            }, 1000) // Delay for 1 second (1000 milliseconds)
+            }, 3000) // Delay for 1 second (1000 milliseconds)
         } else {
             showNoNetworkError()
         }
