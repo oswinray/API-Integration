@@ -1,6 +1,8 @@
 package com.example.apicalltask.adapter
 
+import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +12,11 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.apicalltask.FullScreenImageActivity
 import com.example.apicalltask.OnItemClickListener
 import com.example.apicalltask.R
 import com.example.apicalltask.dao.MovieLists
@@ -53,8 +57,6 @@ class ChildItemAdapter(private val childItemList: List<Data>,context: Context) :
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.download_item -> {
-
-
                         onItemClickListener?.onItemClick(childItem.title, childItem.thumbnail_image)
                         true
                     }
@@ -94,6 +96,15 @@ class ChildItemAdapter(private val childItemList: List<Data>,context: Context) :
             onItemClickListener?.onItemClick(childItem.title, childItem.thumbnail_image)
             holder.downloadImg.visibility = View.GONE
         }
+
+        holder.childItemImage.setOnClickListener {
+            val imageUrl = childItem.poster_image
+
+            val intent = Intent(context, FullScreenImageActivity::class.java)
+            intent.putExtra("image_url", imageUrl)
+            context.startActivity(intent)
+        }
+
         Glide.with(context)
             .load(childItem.poster_image)
             .error(R.drawable.netflix_logo)
