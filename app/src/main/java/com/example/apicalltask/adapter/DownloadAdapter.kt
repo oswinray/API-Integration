@@ -38,7 +38,7 @@ class DownloadAdapter :
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var img_download: ImageView = view.findViewById(R.id.img_child_item_download)
-        var txt_title: TextView = view.findViewById(R.id.download_title)
+        var img_download: ImageView = view.findViewById(R.id.img_child_item)
+        var txt_title: TextView = view.findViewById(R.id.child_item_title)
     }
 }

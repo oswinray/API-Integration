@@ -1,0 +1,19 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Curved gradient background -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:startColor="#3C5E5858"
+            android:centerColor="#3C5E5858"
+            android:endColor="#3C5E5858"
+            android:type="radial"
+            android:angle="90"
+            />
+        </shape>
+    </item>
+
+    <item
+        android:drawable="@drawable/ic_more"
+        android:left="0dp"
+    />
+</layer-list>
