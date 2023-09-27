@@ -24,7 +24,10 @@ class DownloadViewModel(application: Application): AndroidViewModel(application)
         return allTasks
 
     }
-
+    suspend fun isItemDownloaded(title: String): Boolean {
+        val itemCount = repository.isItemDownloaded(title)
+        return itemCount > 0
+    }
 
 
 }

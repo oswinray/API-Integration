@@ -18,4 +18,9 @@ interface ListDao {
     @Query("SELECT * FROM lists")
     fun getAll(): LiveData<List<MovieLists>>
 
+
+    @Query("SELECT COUNT(*) FROM lists WHERE title_name = :title")
+    suspend fun isItemDownloaded(title: String): Int
+
+
 }

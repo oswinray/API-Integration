@@ -5,12 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apicalltask.adapter.ParentItemAdapter
@@ -89,10 +92,48 @@ class ListFragment : Fragment(),OnItemClickListener {
     }
 
     override fun onItemClick(title: String, thumbnail: String) {
-        Log.i("oswin2222", "onItemClick: 87")
-        downloadViewModel?.insertTask(MovieLists(title,thumbnail))
+        lifecycleScope.launch {
+            val isItemAlreadyDownloaded = downloadViewModel?.isItemDownloaded(title)
 
+            if (isItemAlreadyDownloaded == true) {
+                showItemAlreadyDownloadedDialog(title)
+                // Item is already downloaded, handle accordingly
+                Log.i("oswin2222", "Item '$title' is already downloaded")
+            } else {
+                // Item is not downloaded, proceed with the download and insertion
+                Log.i("oswin2222", "onItemClick: 87")
+                val builder = AlertDialog.Builder(requireContext())
+                val inflater = LayoutInflater.from(context)
+                val dialogView = inflater.inflate(R.layout.dialog_item_downloaded, null)
+
+                builder.setView(dialogView)
+
+                val alertDialog = builder.create()
+
+// Set a click listener for the "OK" button (optional)
+                val buttonOK = dialogView.findViewById<Button>(R.id.buttonOK)
+                buttonOK.setOnClickListener {
+                    alertDialog.dismiss() // Close the dialog when "OK" is clicked
+                }
+
+                alertDialog.show()
+
+                downloadViewModel?.insertTask(MovieLists(title, thumbnail))
+            }
+        }
     }
+    private fun showItemAlreadyDownloadedDialog(title: String) {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Item Already Downloaded")
+        alertDialogBuilder.setMessage("The item '$title' is already downloaded.")
+        alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
 
 }
 

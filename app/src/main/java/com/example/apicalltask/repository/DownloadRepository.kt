@@ -36,6 +36,9 @@ class DownloadRepository(application: Application) {
             asyncDeleteTask(task)
         }
     }
+    suspend fun isItemDownloaded(title: String): Int {
+        return userDao?.isItemDownloaded(title) ?: 0
+    }
     private fun asyncDeleteTask(task: MovieLists){
         // inserts task in database
         userDao?.delete(task)

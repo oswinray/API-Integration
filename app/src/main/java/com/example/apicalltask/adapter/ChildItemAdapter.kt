@@ -53,21 +53,6 @@ class ChildItemAdapter(private val childItemList: List<Data>,context: Context) :
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.download_item -> {
-                        val builder = AlertDialog.Builder(context)
-                        val inflater = LayoutInflater.from(context)
-                        val dialogView = inflater.inflate(R.layout.dialog_item_downloaded, null)
-
-                        builder.setView(dialogView)
-
-                        val alertDialog = builder.create()
-
-// Set a click listener for the "OK" button (optional)
-                        val buttonOK = dialogView.findViewById<Button>(R.id.buttonOK)
-                        buttonOK.setOnClickListener {
-                            alertDialog.dismiss() // Close the dialog when "OK" is clicked
-                        }
-
-                        alertDialog.show()
 
 
                         onItemClickListener?.onItemClick(childItem.title, childItem.thumbnail_image)
