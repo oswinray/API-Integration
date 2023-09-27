@@ -17,6 +17,7 @@
     <color name="bottom_nav_unselected_color">#220006</color>
     <color name="bottom_nav_selected_item">#FF000000</color>
     <color name="fragment_bg_color">#FDF8F4</color>
-    <color name="progressBackground">#C1CBCC</color>
+    <color name="progressBackground">#FFFFFFFF</color>
     <color name="progressColor">#03A9F4</color>
+    <color name="progressColorLight">@color/purple_500</color>
 </resources>
