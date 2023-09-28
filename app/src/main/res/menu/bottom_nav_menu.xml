@@ -4,11 +4,11 @@
     <item
         android:id="@+id/listFragment"
         android:icon="@drawable/ic_baseline_list"
-        android:title="List" />
+        android:title="@string/list_title" />
 
     <item
         android:id="@+id/downloadFragment"
         android:icon="@drawable/ic_baseline_download_done_24"
-        android:title="Download" />
+        android:title="@string/download_list" />
 
 </menu>

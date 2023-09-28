@@ -16,6 +16,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.apicalltask.Constants
 import com.example.apicalltask.FullScreenImageActivity
 import com.example.apicalltask.OnItemClickListener
 import com.example.apicalltask.R
@@ -46,6 +47,16 @@ class ChildItemAdapter(private val childItemList: List<Data>,context: Context) :
 
 
         holder.childItemTitle.text = childItem.title
+
+        holder.childItemTitle.setOnClickListener {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.dialog_title)
+
+            val titleTextView = dialog.findViewById<TextView>(R.id.titleTextView)
+            titleTextView.text = childItem.title
+
+            dialog.show()
+        }
         if (childItem.is_premium == 1) {
             holder.childItemImageSub.visibility = View.VISIBLE
         } else {
@@ -74,8 +85,6 @@ class ChildItemAdapter(private val childItemList: List<Data>,context: Context) :
         }*/
         holder.downloadImg.setOnClickListener {
             val task = MovieLists(childItem.title, childItem.thumbnail_image)
-            Log.i("oswin2233", "onBindViewHolder: 53 " + childItem.title)
-            Log.i("oswin2233", "onBindViewHolder: 54 " + childItem.thumbnail_image)
             val builder = AlertDialog.Builder(context)
             val inflater = LayoutInflater.from(context)
             val dialogView = inflater.inflate(R.layout.dialog_item_downloaded, null)
@@ -101,7 +110,7 @@ class ChildItemAdapter(private val childItemList: List<Data>,context: Context) :
             val imageUrl = childItem.poster_image
 
             val intent = Intent(context, FullScreenImageActivity::class.java)
-            intent.putExtra("image_url", imageUrl)
+            intent.putExtra(Constants.IMAGE_URl, imageUrl)
             context.startActivity(intent)
         }
 

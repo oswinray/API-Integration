@@ -1,14 +1,21 @@
 package com.example.apicalltask
 
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -36,6 +43,7 @@ import java.io.IOException
 
 class ListFragment : Fragment(),OnItemClickListener {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private var isNetworkAvailable = true
     private val viewModel by viewModels<ListViewModel>()
     var downloadViewModel: DownloadViewModel? = null
     private lateinit var binding : FragmentListBinding
@@ -55,21 +63,40 @@ class ListFragment : Fragment(),OnItemClickListener {
         showProgressBar()
         setUpViewModels()
         observeLiveData()
-        fetchData()
+        checkInternetAndFetchData()
 
 
     }
 
 
-    private fun fetchData() {
-        coroutineScope.launch(Dispatchers.IO) {
-            viewModel.listOfItem()
-        }
+    private fun checkInternetAndFetchData() {
+        if (isInternetAvailable()) {
+
+                // Network is available again, fetch the data
+                isNetworkAvailable = true // Set the flag to true
+                viewModel.fetchDataIfNetworkAvailable()
+
+        } /*else {
+            // No internet connection, start NoInternetActivity
+            isNetworkAvailable = false // Set the flag to false
+            val intent = Intent(requireContext(), NoInternetActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish() // Optional: Finish the current activity
+        }*/
     }
+
+
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+
+
 
     private fun observeLiveData() {
         viewModel.usersList.observe(this) {
-            Log.i("oswin2233", "observeLiveData: 57")
             val recyclerView: RecyclerView =
                 view?.findViewById(R.id.child_recyclerview) ?: return@observe
 
@@ -98,10 +125,8 @@ class ListFragment : Fragment(),OnItemClickListener {
             if (isItemAlreadyDownloaded == true) {
                 showItemAlreadyDownloadedDialog(title)
                 // Item is already downloaded, handle accordingly
-                Log.i("oswin2222", "Item '$title' is already downloaded")
             } else {
                 // Item is not downloaded, proceed with the download and insertion
-                Log.i("oswin2222", "onItemClick: 87")
                 val builder = AlertDialog.Builder(requireContext())
                 val inflater = LayoutInflater.from(context)
                 val dialogView = inflater.inflate(R.layout.dialog_item_downloaded, null)
@@ -124,9 +149,9 @@ class ListFragment : Fragment(),OnItemClickListener {
     }
     private fun showItemAlreadyDownloadedDialog(title: String) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setTitle("Item Already Downloaded")
-        alertDialogBuilder.setMessage("The item '$title' is already downloaded.")
-        alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+        alertDialogBuilder.setTitle(R.string.item_dowmloaded)
+        alertDialogBuilder.setMessage(Constants.itemAlreadyDownloaded)
+        alertDialogBuilder.setPositiveButton(R.string.ok) { dialog, _ ->
             dialog.dismiss()
         }
 

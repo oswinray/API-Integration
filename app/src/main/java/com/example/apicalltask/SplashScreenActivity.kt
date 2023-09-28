@@ -6,21 +6,27 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.SyncStateContract
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import androidx.appcompat.app.AlertDialog
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.apicalltask.HomeScreenActivity
-import com.example.apicalltask.R
+
+
+
+import com.example.apicalltask.databinding.ActivitySplashScreenBinding  // Import the generated binding class
 
 class SplashScreenActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivitySplashScreenBinding  // Declare a binding variable
+    private val handler = Handler(Looper.getMainLooper())
+    private val checkNetworkInterval = 2000L // Check for network connectivity every 2 seconds
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash_screen)
+        binding = ActivitySplashScreenBinding.inflate(layoutInflater)  // Initialize the binding
+        setContentView(binding.root)  // Use the root view from the binding
 
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -31,41 +37,45 @@ class SplashScreenActivity : AppCompatActivity() {
         val fadeAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.side_slide)
 
         // Find the ImageView or other views you want to animate.
-        val backgroundImage: ImageView = findViewById(R.id.SplashScreenImage)
+        val backgroundImage: ImageView = binding.SplashScreenImage
 
         // Set the animation to the view.
         backgroundImage.startAnimation(fadeAnimation)
 
-        // Check network availability and proceed accordingly.
+        // Find the TextView using View Binding
+        val noNetworkTextView: TextView = binding.noNetworkTextView
+
+        // Start checking for network connectivity
+        checkNetworkConnectivity()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Remove any pending callbacks to avoid leaks
+        handler.removeCallbacksAndMessages(null)
+    }
+
+    private fun checkNetworkConnectivity() {
         if (isNetworkAvailable()) {
-            Handler(Looper.getMainLooper()).postDelayed({
-                val intent = Intent(this, HomeScreenActivity::class.java)
-                startActivity(intent)
-                finish()
-            }, 3000) // Delay for 1 second (1000 milliseconds)
+            // Network is available, start HomeScreenActivity
+            val intent = Intent(this, HomeScreenActivity::class.java)
+            startActivity(intent)
+            finish()
         } else {
-            showNoNetworkError()
+            // Network is not available, show message and check again
+            binding.noNetworkTextView.text = resources.getString(R.string.network_lost)
+            handler.postDelayed({
+                checkNetworkConnectivity()
+            }, checkNetworkInterval)
         }
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
-
-    private fun showNoNetworkError() {
-        // Display a message to the user or show a dialog
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("No Network Connection")
-        builder.setMessage("Please check your network connection and try again.")
-        builder.setPositiveButton("Retry") { _, _ ->
-            recreate() // Restart the activity to check for network again
-        }
-        builder.setNegativeButton("Exit") { _, _ ->
-            finish() // Exit the app if the user chooses to
-        }
-        val dialog = builder.create()
-        dialog.show()// 3000 is the delayed time in milliseconds.
-    }
 }
+
+

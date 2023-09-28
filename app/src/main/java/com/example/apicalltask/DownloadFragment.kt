@@ -46,7 +46,7 @@ class DownloadFragment : Fragment() {
         recyclerView = view.findViewById(R.id.rv_design)
         Manager = GridLayoutManager(requireContext(), 2)
         recyclerView!!.layoutManager = Manager
-        adapter = DownloadAdapter()
+        adapter = DownloadAdapter(requireContext())
         recyclerView!!.adapter = adapter
 
         observerSetup()
@@ -55,7 +55,6 @@ class DownloadFragment : Fragment() {
     private fun observerSetup() {
         viewModel?.getAllTask()?.observe(viewLifecycleOwner) { downloadedItems ->
             // Update the adapter with the new data received from the ViewModel
-            Log.i("oswin2233", "observerSetup: 49" +downloadedItems)
             if (downloadedItems.isEmpty()) {
                 binding.tvMessage.visibility = View.VISIBLE
                 binding.emptyImage.visibility = View.VISIBLE

@@ -2,10 +2,24 @@
     <string name="app_name">Api call task</string>
     <string name="list">List</string>
     <string name="download">DownLoaded</string>
-    <string name="download_list">DownLoad</string>
+    <string name="download_list">Download</string>
     <string name="no_event_message">No Download Yet</string>
     <string name="network_error">Network error. Please check your connection.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="network_lost">No Network Connection. Please check your network and retry</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="list_title">List</string>
+    <string name="download_text_view">Download</string>
+    <string name="subscribe">SUBSCRIBE</string>
+    <string name="download_item">Item is downloaded</string>
+    <string name="ok">Ok</string>
+    <string name="title">Title</string>
+    <string name="connectivity">Please check your connectivity</string>
+    <string name="item_dowmloaded">Item Already Downloaded</string>
+
+
+
+
 
 </resources>
