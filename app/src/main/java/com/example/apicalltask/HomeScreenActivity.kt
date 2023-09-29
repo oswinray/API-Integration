@@ -8,11 +8,14 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.apicalltask.databinding.HomeScreenBinding
+import com.example.apicalltask.viewmodel.ListViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -22,15 +25,18 @@ class HomeScreenActivity : AppCompatActivity() {
     private lateinit var connectionLiveData: ConnectionLiveData
     private lateinit var statusTextView: TextView
     private var shouldShowWelcome = false
+    private lateinit var viewModel: ListViewModel
 
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = HomeScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         statusTextView = findViewById(R.id.statusTextView)
-        connectionLiveData = ConnectionLiveData(this)
+        viewModel = ViewModelProvider(this).get(ListViewModel::class.java) // Replace with your ViewModel class
+        connectionLiveData = ConnectionLiveData(this,viewModel)
         connectionLiveData.observe(this) { isNetworkAvailable ->
             isNetworkAvailable?.let {
                 updateUI(it, statusTextView)

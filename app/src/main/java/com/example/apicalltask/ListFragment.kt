@@ -1,24 +1,16 @@
 package com.example.apicalltask
 
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,26 +19,19 @@ import com.example.apicalltask.adapter.ParentItemAdapter
 import com.example.apicalltask.dao.MovieLists
 import com.example.apicalltask.data.ApiClient
 import com.example.apicalltask.databinding.FragmentListBinding
-import com.example.apicalltask.databinding.ParentItemBinding
 import com.example.apicalltask.repository.ListRepository
 import com.example.apicalltask.viewmodel.DownloadViewModel
 import com.example.apicalltask.viewmodel.ListViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
-
 
 
 class ListFragment : Fragment(),OnItemClickListener {
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    private var isNetworkAvailable = true
     private val viewModel by viewModels<ListViewModel>()
     var downloadViewModel: DownloadViewModel? = null
     private lateinit var binding : FragmentListBinding
+    private val connectionLiveData: ConnectionLiveData by lazy {
+        ConnectionLiveData(requireContext(), viewModel)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,7 +43,6 @@ class ListFragment : Fragment(),OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         downloadViewModel = ViewModelProvider(this).get(DownloadViewModel::class.java)
         showProgressBar()
         setUpViewModels()
@@ -70,19 +54,25 @@ class ListFragment : Fragment(),OnItemClickListener {
 
 
     private fun checkInternetAndFetchData() {
-        if (isInternetAvailable()) {
+        connectionLiveData.observe(viewLifecycleOwner) {
+            if (isInternetAvailable()) {
 
                 // Network is available again, fetch the data
-                isNetworkAvailable = true // Set the flag to true
                 viewModel.fetchDataIfNetworkAvailable()
+                binding.fragmentContainer.visibility = View.VISIBLE
 
-        } /*else {
-            // No internet connection, start NoInternetActivity
-            isNetworkAvailable = false // Set the flag to false
-            val intent = Intent(requireContext(), NoInternetActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish() // Optional: Finish the current activity
-        }*/
+            } else {
+                binding.fragmentContainer.visibility = View.GONE
+
+            }
+            /*else {
+                       // No internet connection, start NoInternetActivity
+                       isNetworkAvailable = false // Set the flag to false
+                       val intent = Intent(requireContext(), NoInternetActivity::class.java)
+                       startActivity(intent)
+                       requireActivity().finish() // Optional: Finish the current activity
+                   }*/
+        }
     }
 
 

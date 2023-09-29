@@ -3,15 +3,16 @@ package com.example.apicalltask
 import DownloadAdapter
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apicalltask.dao.ListDatabase
+import com.example.apicalltask.dao.MovieLists
 import com.example.apicalltask.databinding.FragmentDownloadBinding
 import com.example.apicalltask.databinding.ParentItemBinding
 import com.example.apicalltask.viewmodel.DownloadViewModel

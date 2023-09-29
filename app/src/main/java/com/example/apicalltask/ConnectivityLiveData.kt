@@ -1,13 +1,15 @@
 package com.example.apicalltask
 
-import android.content.Context
 import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkRequest
-import android.util.Log
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import com.example.apicalltask.viewmodel.ListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,12 +20,13 @@ import javax.net.SocketFactory
 
 const val TAG = "MyTagConnectionManager"
 
-class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
+class ConnectionLiveData(context: Context, private val viewModel: ListViewModel) : LiveData<Boolean>() {
 
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private val connectivityManager =
         context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
     private val validNetworks: MutableSet<Network> = HashSet()
+    private val appContext = context.applicationContext
 
     private fun checkValidNetworks() {
         postValue(validNetworks.size > 0)
@@ -55,6 +58,7 @@ class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
                         withContext(Dispatchers.Main) {
                             validNetworks.add(network)
                             checkValidNetworks()
+                            viewModel.fetchDataIfNetworkAvailable()
                         }
                     }
                 }
@@ -67,6 +71,13 @@ class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
         }
     }
 
+        // You can customize the toast message here.
+        private fun showToast(context: Context, message: String) {
+            // You can customize the toast message here.
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+
+    }
     object DoesNetworkHaveInternet {
 
         fun execute(socketFactory: SocketFactory): Boolean {
@@ -81,4 +92,3 @@ class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
             }
         }
     }
-}
