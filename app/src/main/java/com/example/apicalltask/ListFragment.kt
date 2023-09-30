@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apicalltask.adapter.ParentItemAdapter
 import com.example.apicalltask.dao.MovieLists
 import com.example.apicalltask.data.ApiClient
+import com.example.apicalltask.data.HomeContent
 import com.example.apicalltask.databinding.FragmentListBinding
 import com.example.apicalltask.repository.ListRepository
 import com.example.apicalltask.viewmodel.DownloadViewModel
@@ -90,7 +91,13 @@ class ListFragment : Fragment(),OnItemClickListener {
             val recyclerView: RecyclerView =
                 view?.findViewById(R.id.child_recyclerview) ?: return@observe
 
-            val adapter = context?.let { it1 -> ParentItemAdapter(it.response.home_content, it1,this) }
+            val actualResponseList = it.response.home_content
+            val duplicatedList = ArrayList<HomeContent>()
+            duplicatedList.addAll(actualResponseList)
+            duplicatedList.addAll(actualResponseList)
+            duplicatedList.addAll(actualResponseList)
+
+            val adapter = context?.let { it1 -> ParentItemAdapter(duplicatedList, it1,this) }
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(context)
             hideProgressBar()
