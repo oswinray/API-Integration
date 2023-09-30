@@ -37,6 +37,7 @@ class ListFragment : Fragment(),OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        requireActivity().title = "Lists"
         // Inflate the layout for this fragment
         binding = FragmentListBinding.inflate(inflater,container,false)
         return binding.root
@@ -60,10 +61,10 @@ class ListFragment : Fragment(),OnItemClickListener {
 
                 // Network is available again, fetch the data
                 viewModel.fetchDataIfNetworkAvailable()
-                binding.fragmentContainer.visibility = View.VISIBLE
+                binding.statusLayout.visibility = View.GONE
 
             } else {
-                binding.fragmentContainer.visibility = View.GONE
+                binding.statusLayout.visibility = View.VISIBLE
 
             }
             /*else {

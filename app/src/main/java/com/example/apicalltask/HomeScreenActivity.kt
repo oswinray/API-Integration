@@ -23,7 +23,7 @@ class HomeScreenActivity : AppCompatActivity() {
     private lateinit var binding: HomeScreenBinding
     private lateinit var navController: NavController
     private lateinit var connectionLiveData: ConnectionLiveData
-    private lateinit var statusTextView: TextView
+//    private lateinit var statusTextView: TextView
     private var shouldShowWelcome = false
     private lateinit var viewModel: ListViewModel
 
@@ -34,12 +34,12 @@ class HomeScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = HomeScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        statusTextView = findViewById(R.id.statusTextView)
+//        statusTextView = findViewById(R.id.statusTextView)
         viewModel = ViewModelProvider(this).get(ListViewModel::class.java) // Replace with your ViewModel class
         connectionLiveData = ConnectionLiveData(this,viewModel)
         connectionLiveData.observe(this) { isNetworkAvailable ->
             isNetworkAvailable?.let {
-                updateUI(it, statusTextView)
+//                updateUI(it, statusTextView)
             }
         }
         val navHostFragment =

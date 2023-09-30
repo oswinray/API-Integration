@@ -1,3 +1,4 @@
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -38,6 +39,15 @@ class DownloadAdapter(context: Context) :
             .into(viewHolder.img_download)
 
         viewHolder.txt_title.text = data.title_name
+        viewHolder.txt_title.setOnClickListener {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.dialog_title)
+
+            val titleTextView = dialog.findViewById<TextView>(R.id.titleTextView)
+            titleTextView.text = data.title_name
+
+            dialog.show()
+        }
     }
 
     override fun getItemCount(): Int {
