@@ -148,7 +148,7 @@ class ListFragment : Fragment(),OnItemClickListener {
     private fun showItemAlreadyDownloadedDialog(title: String) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setTitle(R.string.item_dowmloaded)
-        alertDialogBuilder.setMessage(Constants.itemAlreadyDownloaded)
+        alertDialogBuilder.setMessage("The item '$title' is already downloaded")
         alertDialogBuilder.setPositiveButton(R.string.ok) { dialog, _ ->
             dialog.dismiss()
         }
