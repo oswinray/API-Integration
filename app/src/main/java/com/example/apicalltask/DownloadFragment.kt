@@ -45,11 +45,11 @@ class DownloadFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[DownloadViewModel::class.java]
         // Initialize your views and set up the RecyclerView here
-        recyclerView = view.findViewById(R.id.rv_design)
+        val recyclerView = binding.rvDesign
         Manager = GridLayoutManager(requireContext(), 2)
-        recyclerView!!.layoutManager = Manager
+        recyclerView.layoutManager = Manager
         adapter = DownloadAdapter(requireContext())
-        recyclerView!!.adapter = adapter
+        recyclerView.adapter = adapter
 
         observerSetup()
     }

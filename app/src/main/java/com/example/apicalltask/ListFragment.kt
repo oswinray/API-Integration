@@ -89,8 +89,7 @@ class ListFragment : Fragment(),OnItemClickListener {
 
     private fun observeLiveData() {
         viewModel.usersList.observe(this) {
-            val recyclerView: RecyclerView =
-                view?.findViewById(R.id.child_recyclerview) ?: return@observe
+            val recyclerView: RecyclerView = binding.childRecyclerview ?: return@observe
 
             val actualResponseList = it.response.home_content
             val duplicatedList = ArrayList<HomeContent>()
