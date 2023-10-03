@@ -22,6 +22,7 @@ import com.example.apicalltask.OnItemClickListener
 import com.example.apicalltask.R
 import com.example.apicalltask.dao.MovieLists
 import com.example.apicalltask.data.Data
+import com.example.apicalltask.databinding.ChildItemBinding
 import com.example.apicalltask.viewmodel.DownloadViewModel
 
 
@@ -31,13 +32,9 @@ class ChildItemAdapter(private val childItemList: List<Data>,context: Context) :
     private var onItemClickListener: OnItemClickListener? = null
 
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ChildViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.child_item, parent, false)
-        return ChildViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildViewHolder {
+        val binding = ChildItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ChildViewHolder(binding)
     }
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.onItemClickListener = listener
@@ -126,11 +123,12 @@ class ChildItemAdapter(private val childItemList: List<Data>,context: Context) :
     }
 
 
-    inner class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val childItemTitle: TextView = itemView.findViewById(R.id.child_item_title)
-        val childItemImageSub: TextView = itemView.findViewById(R.id.img_child_item_subscribe)
-        val downloadImg: TextView = itemView.findViewById(R.id.download_img)
-        val childItemImage: ImageView = itemView.findViewById(R.id.img_child_item)
-        val imgThreeDot: ImageView = itemView.findViewById(R.id.img_three_dot)
+    class ChildViewHolder(private val binding: ChildItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        val childItemTitle = binding.childItemTitle
+        val childItemImageSub = binding.imgChildItemSubscribe
+        val downloadImg = binding.downloadImg
+        val childItemImage = binding.imgChildItem
+        val imgThreeDot = binding.imgThreeDot
     }
+
 }
