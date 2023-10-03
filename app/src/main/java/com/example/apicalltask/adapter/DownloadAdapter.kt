@@ -12,34 +12,35 @@ import com.example.apicalltask.Constants
 import com.example.apicalltask.FullScreenImageActivity
 import com.example.apicalltask.R
 import com.example.apicalltask.dao.MovieLists
+import com.example.apicalltask.databinding.ItemRecyclerBinding
 
 class DownloadAdapter(context: Context) :
     RecyclerView.Adapter<DownloadAdapter.ViewHolder>() {
     private val context = context
     private var downloadedItems: List<MovieLists> = emptyList()
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_recycler, viewGroup, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
+        return ViewHolder(binding)
     }
+
 
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         val data = downloadedItems[i]
 
-        viewHolder.img_download.setOnClickListener {
+        viewHolder.imgDownload.setOnClickListener {
             val imageUrl = data.thumb_image
 
             val intent = Intent(context, FullScreenImageActivity::class.java)
             intent.putExtra(Constants.IMAGE_URl, imageUrl)
             context.startActivity(intent)
         }
-        Glide.with(viewHolder.img_download.context)
+        Glide.with(viewHolder.imgDownload.context)
             .load(data.thumb_image)
-            .into(viewHolder.img_download)
+            .into(viewHolder.imgDownload)
 
-        viewHolder.txt_title.text = data.title_name
-        viewHolder.txt_title.setOnClickListener {
+        viewHolder.txtTitle.text = data.title_name
+        viewHolder.txtTitle.setOnClickListener {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.dialog_title)
 
@@ -50,6 +51,7 @@ class DownloadAdapter(context: Context) :
         }
     }
 
+
     override fun getItemCount(): Int {
         return downloadedItems.size
     }
@@ -59,8 +61,8 @@ class DownloadAdapter(context: Context) :
         notifyDataSetChanged()
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var img_download: ImageView = view.findViewById(R.id.img_child_item)
-        var txt_title: TextView = view.findViewById(R.id.child_item_title)
+    class ViewHolder(private val binding: ItemRecyclerBinding) : RecyclerView.ViewHolder(binding.root) {
+        val imgDownload = binding.imgChildItem
+        val txtTitle = binding.childItemTitle
     }
 }
