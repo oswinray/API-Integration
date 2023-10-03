@@ -33,7 +33,7 @@ class FullScreenImageActivity : AppCompatActivity() {
             .load(imageUrl)
             .fitCenter()
             .into(fullScreenImageView)
-        supportActionBar?.title = "Image View"
+        supportActionBar?.title = Constants.IMAGE_VIEW
         // Hide the status bar and action bar for full-screen display
         window.decorView.apply {
             systemUiVisibility = (

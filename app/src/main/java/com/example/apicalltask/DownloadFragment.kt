@@ -33,7 +33,7 @@ class DownloadFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        requireActivity().title = "Downloads"
+        requireActivity().title = Constants.DOWNLOADS
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_download, container, false)
         binding = FragmentDownloadBinding.inflate(inflater,container,false)

@@ -13,6 +13,7 @@
     <string name="download_text_view">Download</string>
     <string name="subscribe">SUBSCRIBE</string>
     <string name="download_item">Item is downloaded</string>
+    <string name="already_downloaded_message">The item %1$s is already downloaded</string>
     <string name="ok">Ok</string>
     <string name="title">Title</string>
     <string name="connectivity">Please check your connectivity</string>

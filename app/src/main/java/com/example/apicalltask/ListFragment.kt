@@ -37,7 +37,7 @@ class ListFragment : Fragment(),OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        requireActivity().title = "Lists"
+        requireActivity().title = Constants.LISTS
         // Inflate the layout for this fragment
         binding = FragmentListBinding.inflate(inflater,container,false)
         return binding.root
@@ -148,7 +148,8 @@ class ListFragment : Fragment(),OnItemClickListener {
     private fun showItemAlreadyDownloadedDialog(title: String) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setTitle(R.string.item_dowmloaded)
-        alertDialogBuilder.setMessage("The item '$title' is already downloaded")
+        val message = getString(R.string.already_downloaded_message, title)
+        alertDialogBuilder.setMessage(message)
         alertDialogBuilder.setPositiveButton(R.string.ok) { dialog, _ ->
             dialog.dismiss()
         }
