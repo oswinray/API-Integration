@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apicalltask.OnItemClickListener
 import com.example.apicalltask.R
 import com.example.apicalltask.data.HomeContent
+import com.example.apicalltask.databinding.ParentItemBinding
 
 class ParentItemAdapter(private val itemList: List<HomeContent>,context: Context,onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<ParentItemAdapter.ParentViewHolder>() {
@@ -19,9 +20,8 @@ class ParentItemAdapter(private val itemList: List<HomeContent>,context: Context
     private val onItemClickListener = onItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.parent_item, parent, false)
-        return ParentViewHolder(view)
+        val binding = ParentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ParentViewHolder(binding)
     }
 
     override fun onBindViewHolder(parentViewHolder: ParentViewHolder, position: Int) {
@@ -50,8 +50,8 @@ class ParentItemAdapter(private val itemList: List<HomeContent>,context: Context
         return itemList.size
     }
 
-    inner class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val parentItemTitle: TextView = itemView.findViewById(R.id.parent_item_title)
-        val childRecyclerView: RecyclerView = itemView.findViewById(R.id.child_recyclerview)
+    class ParentViewHolder(private val binding: ParentItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        val parentItemTitle = binding.parentItemTitle
+        val childRecyclerView = binding.childRecyclerview
     }
 }
